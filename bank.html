@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>بام ملی</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#0f1a14;--surf:#17271e;--line:#2b4435;--tx:#e9f5ec;--mut:#8fb09a;--gold:#f0b84a;--on:#1a1405;--red:#e58a7a;--grn:#9fd3a0;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root{--bg:#f2f7f1;--surf:#ffffff;--line:#d6e4d8;--tx:#14281c;--mut:#5d7a66;--gold:#1f7a4a;--on:#ffffff;--red:#b5402c;--grn:#2d7a3a;color-scheme:light}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.7}
+main{max-width:480px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+h1{font-size:18px;margin:0;font-weight:800}
+.sub{color:var(--mut);font-size:13px}
+.card{background:linear-gradient(135deg,#1f7a4a,#0d2e1c 75%);color:#e9f5ec;border:1px solid #3fa56d;border-radius:20px;padding:22px;margin-bottom:18px}
+.card .lbl{color:#b5e2c6;font-size:13px}
+.bal{font-size:34px;font-weight:800;color:#ffffff;margin:2px 0 16px}
+.bal small{font-size:15px;font-weight:400;color:#b5e2c6;margin-right:6px}
+.num{direction:ltr;text-align:left;letter-spacing:2px;font-size:16px;color:#dff3e6}
+.row{display:flex;justify-content:space-between;color:#b5e2c6;font-size:13px;margin-top:10px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.tabs button{padding:10px 2px;font-size:12px}
+button{font:inherit;cursor:pointer;border-radius:12px;padding:11px 14px;border:1px solid var(--line);background:var(--surf);color:var(--tx)}
+button.on,button.go{background:var(--gold);color:var(--on);border-color:var(--gold);font-weight:600}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.panel{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:18px}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
+input,select{width:100%;font:inherit;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--tx)}
+input.ltr{direction:ltr;text-align:left}
+.panel button.go{width:100%;margin-top:14px}
+.msg{min-height:22px;margin-top:10px;font-size:14px}
+.err{color:var(--red)}.ok{color:var(--grn)}
+h2{font-size:15px;margin:0 0 8px}
+.tx{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.tx:last-child{border:0}
+.tx b{font-weight:600;display:block}
+.tx span{font-size:12px;color:var(--mut)}
+.amt{font-weight:600;white-space:nowrap}
+.amt.out{color:var(--red)}.amt.in{color:var(--grn)}
+.note{color:var(--mut);font-size:12px;text-align:center;margin-top:20px}
+@media (prefers-reduced-motion:no-preference){button{transition:background .15s}}
+#lock{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+#lock input{max-width:220px;text-align:center;letter-spacing:12px;font-size:22px;direction:ltr}
+#lock button{width:220px;margin-top:12px}
+#lock[hidden],#rc[hidden]{display:none}
+#rc{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surf);border-radius:20px 20px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px));width:100%;max-width:480px}
+.sheet .r{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sheet .r span:first-child{color:var(--mut)}
+.tx[data-i]{cursor:pointer}
+.logo{width:40px;height:40px;border-radius:12px;background:var(--gold);color:var(--on);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;line-height:1}
+.logo.big{width:72px;height:72px;border-radius:22px;font-size:44px;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.add{display:flex;gap:8px;margin-top:10px}.add input{flex:1}.add button{white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="lock"><div class="logo big">ب</div><h1>بام ملی</h1><p id="ltxt" class="sub"></p><input id="lpin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="رمز"><button class="go" id="lgo">ورود</button><div id="lmsg" class="err" role="alert"></div></div>
+<div id="rc" hidden><div class="sheet" role="dialog" aria-label="رسید"><h2>رسید تراکنش</h2><div id="rcb"></div><button class="go" id="rcx" style="width:100%;margin-top:14px">بستن</button></div></div>
+<main>
+<header><div class="brand"><div class="logo">ب</div><div><h1>سلام، آرش</h1><div class="sub">بام ملی (غیررسمی)</div></div></div><div><button id="lockbtn">قفل</button> <button id="reset" aria-label="بازنشانی">بازنشانی</button></div></header>
+
+<section class="card" aria-label="کارت">
+<div class="lbl">موجودی حساب</div>
+<div class="bal"><span id="bal">۰</span><small>تومان</small></div>
+<div class="num">6037 9912 3456 7890</div>
+<div class="row"><span>آرش رضایی</span><span>۱۴۰۷/۰۸</span></div>
+</section>
+
+<div class="tabs" role="tablist">
+<button class="on" data-t="c2c">کارت‌به‌کارت</button>
+<button data-t="send">انتقال</button>
+<button data-t="bill">قبض</button>
+<button data-t="topup">شارژ</button>
+<button data-t="dep">واریز</button>
+<button data-t="loan">تسهیلات</button>
+<button data-t="pts">امتیاز</button>
+</div>
+
+<section class="panel p" id="c2c">
+<label for="cn">شمارهٔ کارت مقصد</label>
+<input id="cn" class="ltr" inputmode="numeric" placeholder="6037 0000 0000 0000">
+<label for="a0">مبلغ (تومان)</label>
+<input id="a0" class="ltr" inputmode="numeric" placeholder="مثلاً 300000">
+<button class="go" id="b0">کارت‌به‌کارت</button>
+<div class="msg" id="m0" role="status"></div>
+</section>
+
+<section class="panel p" id="send" hidden>
+<label for="who">گیرنده</label>
+<select id="who"></select>
+<div class="add"><input id="cname" placeholder="افزودن مخاطب جدید"><button id="cadd">افزودن</button></div>
+<label for="a1">مبلغ (تومان)</label>
+<input id="a1" class="ltr" inputmode="numeric" placeholder="مثلاً 500000">
+<button class="go" id="b1">انتقال</button>
+<div class="msg" id="m1" role="status"></div>
+</section>
+
+<section class="panel p" id="bill" hidden>
+<label for="bt">نوع قبض</label>
+<select id="bt"><option>برق</option><option>آب</option><option>گاز</option><option>تلفن ثابت</option></select>
+<label for="bi">شناسهٔ قبض</label>
+<input id="bi" class="ltr" inputmode="numeric" placeholder="شناسهٔ قبض (۶ تا ۱۳ رقم)">
+<label for="a3">مبلغ (تومان)</label>
+<input id="a3" class="ltr" inputmode="numeric" placeholder="مثلاً 250000">
+<button class="go" id="b3">پرداخت قبض</button>
+<div class="msg" id="m3" role="status"></div>
+</section>
+
+<section class="panel p" id="topup" hidden>
+<label for="op">اپراتور</label>
+<select id="op"><option>ایرانسل</option><option>همراه اول</option><option>رایتل</option></select>
+<label for="ph">شمارهٔ موبایل</label>
+<input id="ph" class="ltr" inputmode="numeric" placeholder="09123456789">
+<label for="a4">مبلغ شارژ</label>
+<select id="a4"><option value="10000">۱۰٬۰۰۰ تومان</option><option value="20000">۲۰٬۰۰۰ تومان</option><option value="50000">۵۰٬۰۰۰ تومان</option><option value="100000">۱۰۰٬۰۰۰ تومان</option></select>
+<button class="go" id="b4">خرید شارژ</button>
+<div class="msg" id="m4" role="status"></div>
+</section>
+
+<section class="panel p" id="loan" hidden>
+<div id="lstat"></div>
+<label for="lt">نوع تسهیلات</label>
+<select id="lt"><option value="18">وام شخصی (سود نمونه ۱۸ درصد)</option><option value="12">وام ازدواج (سود نمونه ۱۲ درصد)</option><option value="23">وام خودرو (سود نمونه ۲۳ درصد)</option></select>
+<label for="la">مبلغ (تومان)</label>
+<input id="la" class="ltr" inputmode="numeric" placeholder="مثلاً 50000000">
+<label for="lm">تعداد اقساط</label>
+<select id="lm"><option value="12">۱۲ ماه</option><option value="24">۲۴ ماه</option><option value="36">۳۶ ماه</option></select>
+<div class="msg" id="lcalc"></div>
+<button class="go" id="b5">درخواست تسهیلات</button>
+<div class="msg" id="m5" role="status"></div>
+</section>
+
+<section class="panel p" id="pts" hidden>
+<h2>امتیاز شما</h2>
+<div id="ptsn" style="font-size:30px;font-weight:800;color:var(--gold)"></div>
+<div class="sub">با هر ۱۰٬۰۰۰ تومان پرداخت (قبض، شارژ، کارت‌به‌کارت و قسط) یک امتیاز می‌گیری.</div>
+<label for="rw">جایزه</label>
+<select id="rw"><option value="100:20000">۱۰۰ امتیاز: ۲۰٬۰۰۰ تومان اعتبار</option><option value="300:70000">۳۰۰ امتیاز: ۷۰٬۰۰۰ تومان اعتبار</option><option value="500:130000">۵۰۰ امتیاز: ۱۳۰٬۰۰۰ تومان اعتبار</option></select>
+<button class="go" id="b6">دریافت جایزه</button>
+<div class="msg" id="m6" role="status"></div>
+</section>
+
+<section class="panel p" id="dep" hidden>
+<label for="a2">مبلغ واریز (تومان)</label>
+<input id="a2" class="ltr" inputmode="numeric" placeholder="مثلاً 1000000">
+<button class="go" id="b2">واریز به حساب</button>
+<div class="msg" id="m2" role="status"></div>
+</section>
+
+<section class="panel">
+<h2>تراکنش‌های اخیر</h2>
+<div id="list"></div>
+</section>
+
+<p class="note">نسخهٔ آزمایشی؛ همهٔ اطلاعات فرضی است و پولی جابه‌جا نمی‌شود.</p>
+</main>
+<script>
+var KEY='zarin_bank_v1';
+var init={contacts:['سارا احمدی','محمد کریمی','مریم حسینی','رضا نوری'],bal:12500000,pts:120,loan:null,tx:[
+{t:'واریز حقوق',a:8000000,d:'امروز'},
+{t:'خرید از سوپرمارکت',a:-640000,d:'دیروز'},
+{t:'انتقال به محمد کریمی',a:-1500000,d:'۲ روز پیش'},
+{t:'شارژ ایرانسل',a:-200000,d:'۳ روز پیش'}]};
+var S;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
+if(!S||typeof S.bal!=='number')S=JSON.parse(JSON.stringify(init));
+if(!S.contacts)S.contacts=init.contacts.slice();
+if(typeof S.pts!=='number')S.pts=120;
+if(!('loan' in S))S.loan=null;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function fa(n){return Math.abs(n).toLocaleString('fa-IR')}
+function digits(s){return s.replace(/[۰-۹]/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)}).replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)}).replace(/[,٬،\s]/g,'')}
+function render(){
+document.getElementById('bal').textContent=fa(S.bal);
+var h='';
+S.tx.slice(0,8).forEach(function(x,i){
+h+='<div class="tx" data-i="'+i+'" role="button" tabindex="0"><div><b>'+x.t+'</b><span>'+x.d+'</span></div><div class="amt '+(x.a<0?'out':'in')+'">'+(x.a<0?'−':'+')+fa(x.a)+'</div></div>';
+});
+document.getElementById('list').innerHTML=h;
+var cs=document.getElementById('who'),cv=cs.value;cs.innerHTML='';
+S.contacts.forEach(function(n){var o=document.createElement('option');o.textContent=n;cs.appendChild(o)});
+if(S.contacts.indexOf(cv)>-1)cs.value=cv;
+renderExtra();
+}
+function amount(id,m){
+var v=digits(document.getElementById(id).value);
+if(!/^[0-9]+$/.test(v)||+v<=0){say(m,'مبلغ را به‌صورت عدد وارد کنید.',1);return 0}
+return +v;
+}
+function say(id,t,e){var el=document.getElementById(id);el.textContent=t;el.className='msg '+(e?'err':'ok')}
+document.getElementById('b1').onclick=function(){
+var v=amount('a1','m1');if(!v)return;
+if(v>S.bal){say('m1','موجودی کافی نیست. حداکثر '+fa(S.bal)+' تومان.',1);return}
+var w=document.getElementById('who').value;
+S.bal-=v;S.tx.unshift({t:'انتقال به '+w,a:-v,d:'همین حالا'});save();render();
+document.getElementById('a1').value='';say('m1',fa(v)+' تومان به '+w+' منتقل شد.');
+};
+document.getElementById('b2').onclick=function(){
+var v=amount('a2','m2');if(!v)return;
+S.bal+=v;S.tx.unshift({t:'واریز به حساب',a:v,d:'همین حالا'});save();render();
+document.getElementById('a2').value='';say('m2',fa(v)+' تومان واریز شد.');
+};
+function pd(s){return s.replace(/[0-9]/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[d]})}
+function spend(v,m,t){
+if(v>S.bal){say(m,'موجودی کافی نیست. حداکثر '+fa(S.bal)+' تومان.',1);return false}
+S.bal-=v;S.pts+=Math.floor(v/10000);S.tx.unshift({t:t,a:-v,d:'همین حالا'});save();render();return true;
+}
+document.getElementById('b0').onclick=function(){
+var c=digits(document.getElementById('cn').value);
+if(!/^[0-9]{16}$/.test(c)){say('m0','شمارهٔ کارت باید ۱۶ رقم باشد.',1);return}
+var v=amount('a0','m0');if(!v)return;
+if(spend(v,'m0','کارت‌به‌کارت به ****'+pd(c.slice(-4)))){document.getElementById('a0').value='';document.getElementById('cn').value='';say('m0',fa(v)+' تومان کارت‌به‌کارت شد.')}
+};
+document.getElementById('b3').onclick=function(){
+var id=digits(document.getElementById('bi').value);
+if(!/^[0-9]{6,13}$/.test(id)){say('m3','شناسهٔ قبض باید ۶ تا ۱۳ رقم باشد.',1);return}
+var v=amount('a3','m3');if(!v)return;
+var t=document.getElementById('bt').value;
+if(spend(v,'m3','قبض '+t)){document.getElementById('a3').value='';document.getElementById('bi').value='';say('m3','قبض '+t+' به مبلغ '+fa(v)+' تومان پرداخت شد.')}
+};
+document.getElementById('b4').onclick=function(){
+var p=digits(document.getElementById('ph').value);
+if(!/^09[0-9]{9}$/.test(p)){say('m4','شمارهٔ موبایل باید ۱۱ رقم و با ۰۹ شروع شود.',1);return}
+var v=+document.getElementById('a4').value,o=document.getElementById('op').value;
+if(spend(v,'m4','شارژ '+o+' '+pd(p))){document.getElementById('ph').value='';say('m4','شارژ '+fa(v)+' تومانی '+o+' خریداری شد.')}
+};
+document.querySelectorAll('.tabs button').forEach(function(b){
+b.onclick=function(){
+document.querySelectorAll('.tabs button').forEach(function(x){x.classList.toggle('on',x===b)});
+document.querySelectorAll('.p').forEach(function(p){p.hidden=p.id!==b.dataset.t});
+};
+});
+document.getElementById('reset').onclick=function(){S=JSON.parse(JSON.stringify(init));save();render()};
+function ref(x){if(!x.r){x.r=String(Math.floor(Math.random()*9e11)+1e11);save()}return x.r}
+var rc=document.getElementById('rc');
+function openRc(i){var x=S.tx[i];if(!x)return;
+var rows=[['عنوان',x.t],['مبلغ',fa(x.a)+' تومان'],['نوع',x.a<0?'برداشت':'واریز'],['زمان',x.d],['شماره پیگیری',pd(ref(x))]];
+var b=document.getElementById('rcb');b.innerHTML='';
+rows.forEach(function(r){var d=document.createElement('div');d.className='r';var a=document.createElement('span'),c=document.createElement('span');a.textContent=r[0];c.textContent=r[1];d.appendChild(a);d.appendChild(c);b.appendChild(d)});
+rc.hidden=false}
+var L=document.getElementById('list');
+L.onclick=function(e){var t=e.target.closest('.tx');if(t)openRc(+t.dataset.i)};
+L.onkeydown=function(e){if(e.key==='Enter'){var t=e.target.closest('.tx');if(t)openRc(+t.dataset.i)}};
+document.getElementById('rcx').onclick=function(){rc.hidden=true};
+rc.onclick=function(e){if(e.target===rc)rc.hidden=true};
+document.getElementById('cadd').onclick=function(){
+var n=document.getElementById('cname').value.trim();
+if(!n){say('m1','نام مخاطب را وارد کنید.',1);return}
+if(S.contacts.indexOf(n)>-1){say('m1','این مخاطب قبلاً اضافه شده است.',1);return}
+S.contacts.push(n);save();render();document.getElementById('who').value=n;document.getElementById('cname').value='';say('m1',n+' به مخاطبین اضافه شد.')};
+var lk=document.getElementById('lock'),lp=document.getElementById('lpin'),lm=document.getElementById('lmsg');
+var PK='bam_pin_v1',PIN=null;try{PIN=localStorage.getItem(PK)}catch(e){}
+document.getElementById('ltxt').textContent=PIN?'رمز چهاررقمی خود را وارد کنید.':'برای اولین ورود، یک رمز چهاررقمی انتخاب کنید.';
+document.getElementById('lgo').onclick=function(){
+var v=digits(lp.value);
+if(!/^[0-9]{4}$/.test(v)){lm.textContent='رمز باید ۴ رقم باشد.';return}
+if(!PIN){try{localStorage.setItem(PK,v)}catch(e){}PIN=v;lp.value='';lm.textContent='';lk.hidden=true;return}
+if(v===PIN){lp.value='';lm.textContent='';lk.hidden=true}else{lm.textContent='رمز اشتباه است.';lp.value=''}};
+lp.onkeydown=function(e){if(e.key==='Enter')document.getElementById('lgo').click()};
+document.getElementById('lockbtn').onclick=function(){lp.value='';lm.textContent='';lk.hidden=false};
+function inst(p,rate,n){var r=rate/1200;return Math.round(r?p*r/(1-Math.pow(1+r,-n)):p/n)}
+function renderExtra(){
+document.getElementById('ptsn').textContent=fa(S.pts)+' امتیاز';
+var el=document.getElementById('lstat');
+if(S.loan){var l=S.loan;
+el.innerHTML='<h2>تسهیلات فعال</h2><div class="tx"><div><b>مبلغ وام</b></div><div>'+fa(l.amt)+' تومان</div></div><div class="tx"><div><b>قسط ماهانه</b></div><div>'+fa(l.inst)+' تومان</div></div><div class="tx"><div><b>اقساط پرداخت‌شده</b></div><div>'+fa(l.paid)+' از '+fa(l.n)+'</div></div><button class="go" id="bpay">پرداخت قسط</button><div class="msg" id="mpay" role="status"></div>';
+document.getElementById('bpay').onclick=payInst;
+}else el.innerHTML='';
+}
+function payInst(){
+var l=S.loan;if(!l)return;
+if(spend(l.inst,'mpay','قسط وام')){
+l.paid++;if(l.paid>=l.n)S.loan=null;save();render();
+if(S.loan)say('mpay','قسط پرداخت شد.');else say('m5','آخرین قسط پرداخت شد و تسهیلات تسویه شد.');
+}}
+function calc(){
+var v=+digits(document.getElementById('la').value),r=+document.getElementById('lt').value,n=+document.getElementById('lm').value,c=document.getElementById('lcalc');
+if(v>0){c.className='msg';c.textContent='قسط ماهانهٔ تقریبی: '+fa(inst(v,r,n))+' تومان'}else c.textContent='';
+}
+['la','lt','lm'].forEach(function(i){var e=document.getElementById(i);e.oninput=calc;e.onchange=calc});
+document.getElementById('b5').onclick=function(){
+if(S.loan){say('m5','ابتدا تسهیلات فعلی را تسویه کنید.',1);return}
+var v=amount('la','m5');if(!v)return;
+if(v<1000000||v>200000000){say('m5','مبلغ باید بین ۱ تا ۲۰۰ میلیون تومان باشد.',1);return}
+var r=+document.getElementById('lt').value,n=+document.getElementById('lm').value;
+S.loan={amt:v,n:n,paid:0,inst:inst(v,r,n)};
+S.bal+=v;S.tx.unshift({t:'دریافت تسهیلات',a:v,d:'همین حالا'});save();render();
+document.getElementById('la').value='';calc();
+say('m5','تسهیلات '+fa(v)+' تومانی به حساب شما واریز شد.');
+};
+document.getElementById('b6').onclick=function(){
+var p=document.getElementById('rw').value.split(':'),c=+p[0],g=+p[1];
+if(S.pts<c){say('m6','امتیاز کافی نیست. '+fa(c-S.pts)+' امتیاز دیگر لازم است.',1);return}
+S.pts-=c;S.bal+=g;S.tx.unshift({t:'جایزه امتیاز',a:g,d:'همین حالا'});save();render();
+say('m6',fa(g)+' تومان اعتبار به حساب شما اضافه شد.');
+};
+render();
+</script>
+</body>
+</html>
